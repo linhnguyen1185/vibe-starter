@@ -10,7 +10,7 @@ done
 cp "$SRC/CLAUDE.md" "$DEST/CLAUDE.md"
 if [ -f "$DEST/settings.json" ] && command -v jq >/dev/null; then
   # Gộp với settings cũ thay vì ghi đè
-  jq -s '.[0] as $a | .[1] as $b | ($a * $b) | .permissions.allow = (($a.permissions.allow // []) + ($b.permissions.allow // []) | unique) | .permissions.deny = (($a.permissions.deny // []) + ($b.permissions.deny // []) | unique)' \
+  jq -s '.[0] as $a | .[1] as $b | ($a * $b) | .permissions.allow = (($a.permissions.allow // []) + ($b.permissions.allow // []) | unique) | .permissions.deny = (($a.permissions.deny // []) + ($b.permissions.deny // []) | unique) | .permissions.ask = (($a.permissions.ask // []) + ($b.permissions.ask // []) | unique)' \
     "$DEST/settings.json" "$SRC/settings.json" > "$DEST/settings.json.tmp"
   mv "$DEST/settings.json.tmp" "$DEST/settings.json"
 else
@@ -23,4 +23,4 @@ if ! command -v claude >/dev/null; then
   else echo "⚠ Chưa có Node.js. Cài Node.js 20+ rồi chạy: npm install -g @anthropic-ai/claude-code"; fi
 fi
 echo "✅ Xong! Agents: $(ls "$DEST/agents" | tr '\n' ' ')"
-echo "   Lệnh tắt: /new-app /fix /review /ship /explain"
+echo "   Lệnh tắt: /new-app /fix /review /ship /explain /deploy"
